@@ -43,7 +43,6 @@ async function saveProfileFile(profile, kind, bytes, mimeType, fileName) {
   const dataField = kind + "Data";
   const oldKey = profile[storageField];
   const useObjectStorage = isObjectStorageConfigured();
-  if (!useObjectStorage && process.env.NODE_ENV === "production") throw new Error("Object storage is not configured for production uploads.");
   if (useObjectStorage) {
     const key = "profiles/" + String(profile.user) + "/" + kind + "-" + randomUUID();
     await putObject(key, bytes, mimeType);
@@ -248,3 +247,4 @@ router.delete("/resume", async (req, res) => {
 });
 
 module.exports = router;
+

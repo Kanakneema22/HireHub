@@ -40,7 +40,7 @@ The server tests use Node’s built-in test runner. The object storage test stub
 
 ## Private resume and photo storage
 
-Development uses the existing MongoDB file fields unless object storage is configured. Production profile uploads require a **private S3-compatible bucket**. AWS S3 and Cloudflare R2 are supported through the S3 API; set these on the server:
+Profile photo and resume files can be stored in MongoDB for a small demo. For larger production use, configure a **private S3-compatible bucket**; AWS S3 and Cloudflare R2 are supported through the S3 API. Without object storage, each profile can store up to one 3 MB photo and one 5 MB resume in MongoDB. To configure S3 storage, set these on the server:
 
 - `S3_ENDPOINT` — S3 API endpoint (for example, the account endpoint for R2).
 - `S3_BUCKET` — private bucket name.
@@ -64,7 +64,7 @@ The cleanup pass removes MongoDB file buffers only when a matching object-storag
 
 A single-origin Docker image builds the React client and serves it from the Express API, so the HttpOnly login cookie remains same-site and the client can use relative `/api` requests.
 
-1. Configure `server/.env` with a production `MONGODB_URI`, strong `JWT_SECRET`, and all private `S3_*` storage values.
+1. Configure `server/.env` with a production `MONGODB_URI` and strong `JWT_SECRET`. For larger production use, also configure all private `S3_*` storage values.
 2. From the project root, build and run the container:
 
        docker compose up --build
@@ -85,3 +85,4 @@ The container listens on the host-provided `PORT` (5000 locally) and serves the 
 - Employer job and applicant management under `/api/jobs` and `/api/applications`
 
 Production uses HTTPS-only secure authentication cookies. Do not upload `.env` files to hosting providers; enter values through their secret environment settings.
+
